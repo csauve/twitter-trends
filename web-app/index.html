@@ -1,0 +1,43 @@
+<html ng-app="twitter-trends">
+  <head>
+    <meta charset="utf-8">
+    <title>Twitter Trends</title>
+    <link rel="stylesheet" href="/static/css/app.css">
+    <script src="/static/js/libs/zepto.min.js"></script>
+    <script src="/static/js/libs/moment.min.js"></script>
+    <script src="/static/js/libs/angular.min.js"></script>
+    <script src="/static/js/libs/three.min.js"></script>
+    <script src="/static/js/libs/helvetiker_regular.typeface.js"></script>
+    <script src="/static/js/app.js"></script>
+  </head>
+  <body ng-controller="GlobalCtrl">
+    <div id="menubar">
+      <div class="pull-left">
+        <h3>Twitter Trends Visualization</h3>
+        <p class="muted">Connor Sauve</p>
+      </div>
+      <div class="pull-right">
+        <button ng-click="update()">Refresh</button>
+        <button ng-class="{'disabled': spin}" ng-click="toggleSpin()">Spin</button>
+        <button ng-click="showAll()">All</button>
+        <button ng-click="showNone()">None</button>
+        <button ng-click="showInvert()">Invert</button>
+      </div>
+      <div class="clearfix"></div>
+
+      <div id="sidebar">
+        <ul id="hashtags-list" ng-show="lines">
+          <li ng-repeat="line in lines" ng-mouseover="hoverOver(line)" ng-mouseleave="hoverLeave(line)">
+            <input type="checkbox" ng-model="line.line.visible">&nbsp;
+            <span ng-click="toggleLine(line)" style="color: {{line.line.material.color.getHexString()}}">#{{line.hashtag}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <canvas id="axis-canvas"></canvas>
+    <canvas id="main-canvas"></canvas>
+
+    <div id="footer"><span ng-show="minDate">Displaying results from {{maxDate | fromNow}} ({{maxDate | date:'M/d/yy h:mm a'}}) to {{minDate | fromNow}} ({{minDate | date:'M/d/yy h:mm a'}})</span></div>
+  </body>
+</html>
