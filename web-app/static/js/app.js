@@ -59,7 +59,7 @@ function GlobalCtrl($scope) {
 
     function init() {
         console.log("Getting latest data");
-        $.get("/api/snapshots", function(data) {
+        $.get("/api/snapshots?hours=24", function(data) {
             $scope.$apply(function() {
                 initScene(data);
                 initAxis();
@@ -87,7 +87,7 @@ function GlobalCtrl($scope) {
             }
 
             var x = parseFloat(trendData[i].sentimentIndex) * 20.0 - 100;
-            var y = Math.log(parseFloat(trendData[i].popularityIndex) - 20) * 20;
+            var y = (Math.log(parseFloat(trendData[i].popularityIndex)) - 20) * 50;
             var seconds = new Date(trendData[i].dateCreated).getTime() / 1000;
             var z = (seconds - 1382342000) / 80;
 
@@ -111,7 +111,7 @@ function GlobalCtrl($scope) {
             points[hashtag].push(new THREE.Vector3(x, y, z));
         }
 
-        var center = new THREE.Vector3((xMax + xMin) / 2.0 - 50, (yMax + yMin) / 2.0, (zMax + zMin) / 2.0);
+        var center = new THREE.Vector3((xMax + xMin) / 2.0 - 50, (yMax + yMin) / 2.0 - 100, (zMax + zMin) / 2.0);
 
         //load the lines into scene objects
         $scope.lines = [];
@@ -162,9 +162,9 @@ function GlobalCtrl($scope) {
         
         function animate() {
             requestAnimationFrame(animate);
-            camera.position.x = Math.sin(cameraAngle) * 350.0 + center.x;
-            camera.position.y = 100 + center.y;
-            camera.position.z = Math.cos(cameraAngle) * 350.0 + center.z;
+            camera.position.x = Math.sin(cameraAngle) * 400.0 + center.x;
+            camera.position.y = 50 + center.y;
+            camera.position.z = Math.cos(cameraAngle) * 400.0 + center.z;
             camera.lookAt(center);
             renderer.render(scene, camera);
             if ($scope.spin) {
