@@ -14,12 +14,20 @@ app.configure(function() {
     }
 });
 
+var auth = function(req, res, next) {
+    if (req.query.key == config.apiKey) {
+        next();
+    } else {
+        res.send(401);
+    }
+};
+
 app.get("/api/snapshots", snapshotResource.list);
 app.get("/api/snapshots/:id", snapshotResource.get);
-app.post("/api/snapshots", snapshotResource.create);
-//app.del("/api/snapshots", snapshotResource.removeAll);
-//app.put("/api/snapshots/:id", snapshotResource.update);
-//app.del("/api/snapshots/:id", snapshotResource.remove);
+app.post("/api/snapshots", auth, snapshotResource.create);
+app.del("/api/snapshots", auth, snapshotResource.removeAll);
+app.put("/api/snapshots/:id", auth, snapshotResource.update);
+app.del("/api/snapshots/:id", auth, snapshotResource.remove);
 
 //serve the angular app on all other routes
 app.get("*", function(req, res) {
