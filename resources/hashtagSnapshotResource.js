@@ -6,7 +6,13 @@ mongoose.connect(config.dbConnectionString);
 
 module.exports = {
     list: function(req, res) {
-        var query = HashtagSnapshot.find();
+        var query;
+        if (req.query.hours && parseInt(req.query.hours)) {
+            var cutoff = new Date(new Date().getTime() - 60 * 60 * 1000 * parseInt(req.query.hours));
+            query = HashtagSnapshot.find({"dateCreated": {$gt: cutoff}});
+        } else {
+            query = HashtagSnapshot.find();
+        }
         query.sort("hashtag dateCreated");
         query.exec(function(error, result) {
             res.send(error ? 500 : result);
