@@ -42,15 +42,34 @@ function GlobalCtrl($scope) {
     };
 
     $scope.toggleLine = function(line) {
-        line.line.visible = !line.line.visible;
+        line.line.visible = line.line.previewMode;
+        line.line.previewMode = !line.line.previewMode;
     };
 
     $scope.hoverOver = function(line) {
-        line.line.material.linewidth = 5;
+        for (var i = 0; i < $scope.lines.length; i++) {
+            $scope.lines[i].line.material.opacity = 0.5;
+        }
+
+        if (!line.line.visible) {
+            line.line.previewMode = true;
+            line.line.visible = true;
+        }
+        line.line.material.opacity = 1;
+        line.line.material.linewidth = 4;
+        console.log(line);
     };
 
     $scope.hoverLeave = function(line) {
+        for (var i = 0; i < $scope.lines.length; i++) {
+            $scope.lines[i].line.material.opacity = 1;
+        }
+
         line.line.material.linewidth = 1;
+        if (line.line.previewMode) {
+            line.line.visible = false;
+            line.line.previewMode = false;
+        }
     };
 
     $scope.toggleSpin = function() {
@@ -70,7 +89,10 @@ function GlobalCtrl($scope) {
     function randomLineMaterial() {
         var colour = new THREE.Color();
         colour.setHSL(Math.random(), 1, 0.5);
-        return new THREE.LineBasicMaterial({color: colour});
+        var mat = new THREE.LineBasicMaterial({color: colour});
+        mat.transparent = true;
+        mat.opacity = 1;
+        return mat;
     }
 
     function initScene(trendData) {
@@ -111,7 +133,7 @@ function GlobalCtrl($scope) {
             points[hashtag].push(new THREE.Vector3(x, y, z));
         }
 
-        var center = new THREE.Vector3((xMax + xMin) / 2.0, -870, (zMax + zMin) / 2.0);
+        var center = new THREE.Vector3(-30, -870, (zMax + zMin) / 2.0);
 	console.log(center);
 
         //load the lines into scene objects
@@ -131,6 +153,7 @@ function GlobalCtrl($scope) {
             }
 
             var line = new THREE.Line(geometry, material);
+            line.previewMode = false;
             $scope.lines.push({hashtag: hashtag, line: line});
             scene.add(line);
         }
