@@ -122,7 +122,7 @@ def main():
   response = twitterreq("https://stream.twitter.com/1/statuses/sample.json", "GET", [])
   for line in response:
     now  = datetime.datetime.now()
-    elapsed_seconds = (now - start).total_seconds()
+    elapsed_seconds = (now - start).seconds + (now - start).days * 24 * 3600
     if elapsed_seconds > duration_sec:
       break;
     handle_tweet(line.strip())
