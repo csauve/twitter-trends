@@ -59,7 +59,7 @@ function GlobalCtrl($scope) {
 
     function init() {
         console.log("Getting latest data");
-        $.get("/api/snapshots?hours=24", function(data) {
+        $.get("/api/snapshots?hours=12", function(data) {
             $scope.$apply(function() {
                 initScene(data);
                 initAxis();
@@ -111,7 +111,8 @@ function GlobalCtrl($scope) {
             points[hashtag].push(new THREE.Vector3(x, y, z));
         }
 
-        var center = new THREE.Vector3((xMax + xMin) / 2.0 - 50, (yMax + yMin) / 2.0 - 100, (zMax + zMin) / 2.0);
+        var center = new THREE.Vector3((xMax + xMin) / 2.0, -870, (zMax + zMin) / 2.0);
+	console.log(center);
 
         //load the lines into scene objects
         $scope.lines = [];
@@ -163,7 +164,7 @@ function GlobalCtrl($scope) {
         function animate() {
             requestAnimationFrame(animate);
             camera.position.x = Math.sin(cameraAngle) * 400.0 + center.x;
-            camera.position.y = 50 + center.y;
+            camera.position.y = 70 + center.y;
             camera.position.z = Math.cos(cameraAngle) * 400.0 + center.z;
             camera.lookAt(center);
             renderer.render(scene, camera);
