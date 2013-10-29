@@ -10,7 +10,7 @@ module.exports = {
         if (req.query.hours && parseInt(req.query.hours)) {
             var cutoff = new Date(new Date().getTime() - 60 * 60 * 1000 * parseInt(req.query.hours));
             query = HashtagSnapshot.find({"dateCreated": {$gt: cutoff}});
-        } else if (req.query.since)
+        } else if (req.query.since) {
             query = HashtagSnapshot.find({"dateCreated": {$gt: new Date(req.query.since)}});
         } else {
             query = HashtagSnapshot.find();
