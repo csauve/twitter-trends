@@ -48,7 +48,7 @@ function GlobalCtrl($scope) {
 
     $scope.hoverOver = function(line) {
         for (var i = 0; i < $scope.lines.length; i++) {
-            $scope.lines[i].line.material.opacity = 0.5;
+            $scope.lines[i].line.material.opacity = 0.2;
         }
 
         if (!line.line.visible) {
